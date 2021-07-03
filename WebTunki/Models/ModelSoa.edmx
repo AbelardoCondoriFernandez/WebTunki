@@ -1,0 +1,433 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="tunkiModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="contactos">
+          <Key>
+            <PropertyRef Name="idcontacto" />
+          </Key>
+          <Property Name="idcontacto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombrecontacto" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="telefono" Type="varchar" MaxLength="9" Nullable="false" />
+        </EntityType>
+        <EntityType Name="mediopagos">
+          <Key>
+            <PropertyRef Name="idmediopago" />
+          </Key>
+          <Property Name="idmediopago" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombremediopago" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="operadores">
+          <Key>
+            <PropertyRef Name="idoperador" />
+          </Key>
+          <Property Name="idoperador" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombreoperador" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="pagocontactos">
+          <Key>
+            <PropertyRef Name="idpagocontacto" />
+          </Key>
+          <Property Name="idpagocontacto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="saldo" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="codigodeoperacion" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="fecha" Type="date" />
+          <Property Name="monto" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="idcontacto" Type="int" Nullable="false" />
+          <Property Name="idusuarios" Type="int" Nullable="false" />
+          <Property Name="idmediopago" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="recargacelulares">
+          <Key>
+            <PropertyRef Name="idrecargacelular" />
+          </Key>
+          <Property Name="idrecargacelular" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="telefono" Type="decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="monto" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="idoperador" Type="int" Nullable="false" />
+          <Property Name="idusuario" Type="int" Nullable="false" />
+          <Property Name="idmediopago" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="usuarios">
+          <Key>
+            <PropertyRef Name="idusuario" />
+          </Key>
+          <Property Name="idusuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="correo" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="saldo" Type="decimal" Precision="8" Scale="2" />
+        </EntityType>
+        <Association Name="fk_contacto">
+          <End Role="contactos" Type="Self.contactos" Multiplicity="1" />
+          <End Role="pagocontactos" Type="Self.pagocontactos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contactos">
+              <PropertyRef Name="idcontacto" />
+            </Principal>
+            <Dependent Role="pagocontactos">
+              <PropertyRef Name="idcontacto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_mediopago">
+          <End Role="mediopagos" Type="Self.mediopagos" Multiplicity="1" />
+          <End Role="pagocontactos" Type="Self.pagocontactos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="mediopagos">
+              <PropertyRef Name="idmediopago" />
+            </Principal>
+            <Dependent Role="pagocontactos">
+              <PropertyRef Name="idmediopago" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_mediopagos">
+          <End Role="mediopagos" Type="Self.mediopagos" Multiplicity="1" />
+          <End Role="recargacelulares" Type="Self.recargacelulares" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="mediopagos">
+              <PropertyRef Name="idmediopago" />
+            </Principal>
+            <Dependent Role="recargacelulares">
+              <PropertyRef Name="idmediopago" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_operadores">
+          <End Role="operadores" Type="Self.operadores" Multiplicity="1" />
+          <End Role="recargacelulares" Type="Self.recargacelulares" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="operadores">
+              <PropertyRef Name="idoperador" />
+            </Principal>
+            <Dependent Role="recargacelulares">
+              <PropertyRef Name="idoperador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_usuario">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="pagocontactos" Type="Self.pagocontactos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idusuario" />
+            </Principal>
+            <Dependent Role="pagocontactos">
+              <PropertyRef Name="idusuarios" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_usuarios">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="recargacelulares" Type="Self.recargacelulares" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idusuario" />
+            </Principal>
+            <Dependent Role="recargacelulares">
+              <PropertyRef Name="idusuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="tunkiModelStoreContainer">
+          <EntitySet Name="contactos" EntityType="Self.contactos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mediopagos" EntityType="Self.mediopagos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="operadores" EntityType="Self.operadores" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pagocontactos" EntityType="Self.pagocontactos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="recargacelulares" EntityType="Self.recargacelulares" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="usuarios" EntityType="Self.usuarios" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fk_contacto" Association="Self.fk_contacto">
+            <End Role="contactos" EntitySet="contactos" />
+            <End Role="pagocontactos" EntitySet="pagocontactos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_mediopago" Association="Self.fk_mediopago">
+            <End Role="mediopagos" EntitySet="mediopagos" />
+            <End Role="pagocontactos" EntitySet="pagocontactos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_mediopagos" Association="Self.fk_mediopagos">
+            <End Role="mediopagos" EntitySet="mediopagos" />
+            <End Role="recargacelulares" EntitySet="recargacelulares" />
+          </AssociationSet>
+          <AssociationSet Name="fk_operadores" Association="Self.fk_operadores">
+            <End Role="operadores" EntitySet="operadores" />
+            <End Role="recargacelulares" EntitySet="recargacelulares" />
+          </AssociationSet>
+          <AssociationSet Name="fk_usuario" Association="Self.fk_usuario">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="pagocontactos" EntitySet="pagocontactos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_usuarios" Association="Self.fk_usuarios">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="recargacelulares" EntitySet="recargacelulares" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="tunkiModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="contactos">
+          <Key>
+            <PropertyRef Name="idcontacto" />
+          </Key>
+          <Property Name="idcontacto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombrecontacto" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="telefono" Type="String" MaxLength="9" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="pagocontactos" Relationship="Self.fk_contacto" FromRole="contactos" ToRole="pagocontactos" />
+        </EntityType>
+        <EntityType Name="mediopagos">
+          <Key>
+            <PropertyRef Name="idmediopago" />
+          </Key>
+          <Property Name="idmediopago" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombremediopago" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="pagocontactos" Relationship="Self.fk_mediopago" FromRole="mediopagos" ToRole="pagocontactos" />
+          <NavigationProperty Name="recargacelulares" Relationship="Self.fk_mediopagos" FromRole="mediopagos" ToRole="recargacelulares" />
+        </EntityType>
+        <EntityType Name="operadores">
+          <Key>
+            <PropertyRef Name="idoperador" />
+          </Key>
+          <Property Name="idoperador" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombreoperador" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="recargacelulares" Relationship="Self.fk_operadores" FromRole="operadores" ToRole="recargacelulares" />
+        </EntityType>
+        <EntityType Name="pagocontactos">
+          <Key>
+            <PropertyRef Name="idpagocontacto" />
+          </Key>
+          <Property Name="idpagocontacto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="saldo" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="codigodeoperacion" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="fecha" Type="DateTime" Precision="0" />
+          <Property Name="monto" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="idcontacto" Type="Int32" Nullable="false" />
+          <Property Name="idusuarios" Type="Int32" Nullable="false" />
+          <Property Name="idmediopago" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="contactos" Relationship="Self.fk_contacto" FromRole="pagocontactos" ToRole="contactos" />
+          <NavigationProperty Name="mediopagos" Relationship="Self.fk_mediopago" FromRole="pagocontactos" ToRole="mediopagos" />
+          <NavigationProperty Name="usuarios" Relationship="Self.fk_usuario" FromRole="pagocontactos" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="recargacelulares">
+          <Key>
+            <PropertyRef Name="idrecargacelular" />
+          </Key>
+          <Property Name="idrecargacelular" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="telefono" Type="Decimal" Precision="9" Scale="0" Nullable="false" />
+          <Property Name="monto" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="idoperador" Type="Int32" Nullable="false" />
+          <Property Name="idusuario" Type="Int32" Nullable="false" />
+          <Property Name="idmediopago" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="mediopagos" Relationship="Self.fk_mediopagos" FromRole="recargacelulares" ToRole="mediopagos" />
+          <NavigationProperty Name="operadores" Relationship="Self.fk_operadores" FromRole="recargacelulares" ToRole="operadores" />
+          <NavigationProperty Name="usuarios" Relationship="Self.fk_usuarios" FromRole="recargacelulares" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="usuarios">
+          <Key>
+            <PropertyRef Name="idusuario" />
+          </Key>
+          <Property Name="idusuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="correo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="saldo" Type="Decimal" Precision="8" Scale="2" />
+          <NavigationProperty Name="pagocontactos" Relationship="Self.fk_usuario" FromRole="usuarios" ToRole="pagocontactos" />
+          <NavigationProperty Name="recargacelulares" Relationship="Self.fk_usuarios" FromRole="usuarios" ToRole="recargacelulares" />
+        </EntityType>
+        <Association Name="fk_contacto">
+          <End Role="contactos" Type="Self.contactos" Multiplicity="1" />
+          <End Role="pagocontactos" Type="Self.pagocontactos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="contactos">
+              <PropertyRef Name="idcontacto" />
+            </Principal>
+            <Dependent Role="pagocontactos">
+              <PropertyRef Name="idcontacto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_mediopago">
+          <End Role="mediopagos" Type="Self.mediopagos" Multiplicity="1" />
+          <End Role="pagocontactos" Type="Self.pagocontactos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="mediopagos">
+              <PropertyRef Name="idmediopago" />
+            </Principal>
+            <Dependent Role="pagocontactos">
+              <PropertyRef Name="idmediopago" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_mediopagos">
+          <End Role="mediopagos" Type="Self.mediopagos" Multiplicity="1" />
+          <End Role="recargacelulares" Type="Self.recargacelulares" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="mediopagos">
+              <PropertyRef Name="idmediopago" />
+            </Principal>
+            <Dependent Role="recargacelulares">
+              <PropertyRef Name="idmediopago" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_operadores">
+          <End Role="operadores" Type="Self.operadores" Multiplicity="1" />
+          <End Role="recargacelulares" Type="Self.recargacelulares" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="operadores">
+              <PropertyRef Name="idoperador" />
+            </Principal>
+            <Dependent Role="recargacelulares">
+              <PropertyRef Name="idoperador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_usuario">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="pagocontactos" Type="Self.pagocontactos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idusuario" />
+            </Principal>
+            <Dependent Role="pagocontactos">
+              <PropertyRef Name="idusuarios" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_usuarios">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="recargacelulares" Type="Self.recargacelulares" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="idusuario" />
+            </Principal>
+            <Dependent Role="recargacelulares">
+              <PropertyRef Name="idusuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="tunkiEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="contactos" EntityType="Self.contactos" />
+          <EntitySet Name="mediopagos" EntityType="Self.mediopagos" />
+          <EntitySet Name="operadores" EntityType="Self.operadores" />
+          <EntitySet Name="pagocontactos" EntityType="Self.pagocontactos" />
+          <EntitySet Name="recargacelulares" EntityType="Self.recargacelulares" />
+          <EntitySet Name="usuarios" EntityType="Self.usuarios" />
+          <AssociationSet Name="fk_contacto" Association="Self.fk_contacto">
+            <End Role="contactos" EntitySet="contactos" />
+            <End Role="pagocontactos" EntitySet="pagocontactos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_mediopago" Association="Self.fk_mediopago">
+            <End Role="mediopagos" EntitySet="mediopagos" />
+            <End Role="pagocontactos" EntitySet="pagocontactos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_mediopagos" Association="Self.fk_mediopagos">
+            <End Role="mediopagos" EntitySet="mediopagos" />
+            <End Role="recargacelulares" EntitySet="recargacelulares" />
+          </AssociationSet>
+          <AssociationSet Name="fk_operadores" Association="Self.fk_operadores">
+            <End Role="operadores" EntitySet="operadores" />
+            <End Role="recargacelulares" EntitySet="recargacelulares" />
+          </AssociationSet>
+          <AssociationSet Name="fk_usuario" Association="Self.fk_usuario">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="pagocontactos" EntitySet="pagocontactos" />
+          </AssociationSet>
+          <AssociationSet Name="fk_usuarios" Association="Self.fk_usuarios">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="recargacelulares" EntitySet="recargacelulares" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="tunkiModelStoreContainer" CdmEntityContainer="tunkiEntities1">
+          <EntitySetMapping Name="contactos">
+            <EntityTypeMapping TypeName="tunkiModel.contactos">
+              <MappingFragment StoreEntitySet="contactos">
+                <ScalarProperty Name="idcontacto" ColumnName="idcontacto" />
+                <ScalarProperty Name="nombrecontacto" ColumnName="nombrecontacto" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mediopagos">
+            <EntityTypeMapping TypeName="tunkiModel.mediopagos">
+              <MappingFragment StoreEntitySet="mediopagos">
+                <ScalarProperty Name="idmediopago" ColumnName="idmediopago" />
+                <ScalarProperty Name="nombremediopago" ColumnName="nombremediopago" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="operadores">
+            <EntityTypeMapping TypeName="tunkiModel.operadores">
+              <MappingFragment StoreEntitySet="operadores">
+                <ScalarProperty Name="idoperador" ColumnName="idoperador" />
+                <ScalarProperty Name="nombreoperador" ColumnName="nombreoperador" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pagocontactos">
+            <EntityTypeMapping TypeName="tunkiModel.pagocontactos">
+              <MappingFragment StoreEntitySet="pagocontactos">
+                <ScalarProperty Name="idpagocontacto" ColumnName="idpagocontacto" />
+                <ScalarProperty Name="saldo" ColumnName="saldo" />
+                <ScalarProperty Name="codigodeoperacion" ColumnName="codigodeoperacion" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="monto" ColumnName="monto" />
+                <ScalarProperty Name="idcontacto" ColumnName="idcontacto" />
+                <ScalarProperty Name="idusuarios" ColumnName="idusuarios" />
+                <ScalarProperty Name="idmediopago" ColumnName="idmediopago" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="recargacelulares">
+            <EntityTypeMapping TypeName="tunkiModel.recargacelulares">
+              <MappingFragment StoreEntitySet="recargacelulares">
+                <ScalarProperty Name="idrecargacelular" ColumnName="idrecargacelular" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="monto" ColumnName="monto" />
+                <ScalarProperty Name="idoperador" ColumnName="idoperador" />
+                <ScalarProperty Name="idusuario" ColumnName="idusuario" />
+                <ScalarProperty Name="idmediopago" ColumnName="idmediopago" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="usuarios">
+            <EntityTypeMapping TypeName="tunkiModel.usuarios">
+              <MappingFragment StoreEntitySet="usuarios">
+                <ScalarProperty Name="idusuario" ColumnName="idusuario" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="correo" ColumnName="correo" />
+                <ScalarProperty Name="saldo" ColumnName="saldo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
