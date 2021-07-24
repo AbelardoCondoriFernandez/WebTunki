@@ -24,10 +24,5 @@ namespace WebTunki.Models
         public string telefono { get; set; }
     
         public virtual ICollection<pagocontactos> pagocontactos { get; set; }
-
-        public static implicit operator contactosoa(contactos v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

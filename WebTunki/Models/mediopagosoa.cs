@@ -13,7 +13,7 @@ namespace WebTunki.Models
             tunkiEntities1 db = new tunkiEntities1();
             mediopagos obj = new mediopagos()
             {
-                nombremediopago = mediopagosdto.nombremediopago,
+                nombremediopago = mediopagosdto.nombremediopago
               
             };
             db.mediopagos.Add(obj);

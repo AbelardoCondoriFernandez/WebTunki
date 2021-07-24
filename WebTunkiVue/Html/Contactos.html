@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Contacto Tunki</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" integrity="undefined" crossorigin="anonymous">
+</head>
+<body>
+    <div id="app" class="container">
+        <h1>Contacto Tunki</h1>
+        <p></p>
+     
+        <div class="row">
+            <div class="col-1">
+                Contactos
+            </div>
+            <div class="col-11">
+                <select class="form-control" v-model="frmcontacto" @change="fetchContacto()">
+                    <option v-for="item in contacto" :value="item.idcontacto">{{item.nombrecontacto}}</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn btn-primary" @click="nuevo">Nuevo</button>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Telefono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in contacto">
+                    <td>{{item.nombrecontacto}}</td>
+                    <td>{{item.telefono}}</td>
+                    <td>
+                        <button class="btn btn-primary">Editar</button>
+                        <button class="btn btn-primary">Detalles</button>
+                        <button class="btn btn-danger">Eliminar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div id="mdlContacto" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Contacto</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-3">
+                                Nombre de Contacto
+                            </div>
+                            <div class="col-9">
+                                <input class="form-control" v-model="contactos.nombrecontacto" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                Telefono
+                            </div>
+                            <div class="col-9">
+                                <input class="form-control" v-model="contactos.telefono" />
+                            </div>
+                        </div>
+                        {{contactos}}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click="registrar">Registrar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.js" integrity="sha256-HwWONEZrpuoh951cQD1ov2HUK5zA5DwJ1DNUXaM6FsY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="undefined" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="undefined" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.esm.min.js" integrity="undefined" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.6.1/vue-resource.min.js" integrity="sha512-NuUIe6TWdEivPTcxnihx2e6r2xQFEFPrJfpdZWoBwZF6G51Rphcf5r/1ZU/ytj4lyHwLd/YGMix4a5LqAN15XA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                contacto: [],
+                contactos: {nombrecontacto:"",telefono:0}
+            },
+            methods: {
+                fetchContacto: function () {
+                    var url = "http://localhost:64607/api/tunki/listarcontacto";
+                    this.$http.get(url).then(function (response) {
+                        this.contacto = response.data;
+                    });
+                },
+                nuevo: function () {
+
+                    $("#mdlContacto").modal("show");
+                },
+                registrar: function () {
+                    var contactodto = this.contactos;
+                    var url = "http://localhost:64607/api/tunki/registrarcontacto";
+                    this.$http.post(url, contactodto).then(function (response) {
+                        this.fetchContacto();
+                    });
+                }
+            },
+            mounted: function () {
+                this.fetchContacto();
+            }
+        });
+
+
+    </script>
+</body>
+</html>

@@ -23,6 +23,18 @@ namespace WebTunki.Controllers
         {
             return mediopagosoa.ListarMedioPago();
         }
+      /*  [HttpPost]
+        [Route("api/tunki/registra")]
+        public pagocontactodto RegistrarPagoContacto(pagocontactodto pagocontactodto)
+        {
+            return pagocontactosoa.RegistroPagoContacto(pagocontactodto);
+        }
+        [HttpGet]
+        [Route("api/tunki/listarpagocontactos")]
+        public IEnumerable<pagocontactodto> ListarPagoContacto(int idmediopago)
+        {
+            return pagocontactosoa.ListarPagosContactos(idmediopago);
+        }*/
     }
 }
 
